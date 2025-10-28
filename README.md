@@ -2,13 +2,11 @@
 
 This is a fork of the original cheatsheet repo from [@buildwithmalik](https://github.com/buildwithmalik).
 
-I speak too many programming dialects such as C/C++, Java, and Python, and sometimes my brain behaves like a bad language model that switches languages mid-sentence.  
-Solving problems and training models is fun, but not when my hands know what to do while my brain hesitates on the exact function call.
+I speak too many programming dialects such as C/C++, Java, and Python, and sometimes my brain behaves like a bad language model that switches languages mid-sentence. Solving problems and training models is fun, but not when my hands know what to do while my brain hesitates on the exact function call.
 
 Apparently I have enough memory to remember entire grammars but not enough to recall library syntax with precision. Ironically.
 
-This repo serves as my external brain for Python, pandas, numpy, scikit-learn, PyTorch, Transformers, and JAX, so that future-me can code faster and google less.  
-Since I already behave like a badly-aligned LLM mixing languages, this repo is essentially my fine-tuning dataset to make myself speak Python more consistently.
+This repo serves as my external brain for Python, pandas, numpy, scikit-learn, PyTorch, Transformers, and JAX, so that future-me can code faster and google less. Since I already behave like a badly-aligned LLM mixing languages, this repo is essentially my fine-tuning dataset to make myself speak Python more consistently.
 
 
 
@@ -55,6 +53,7 @@ Since I already behave like a badly-aligned LLM mixing languages, this repo is e
 
 ### Operator Precedence
 ![Python Operators](https://user-images.githubusercontent.com/47276307/172329850-61fc0809-a4b0-416c-848b-1c502ecb4772.jpg)
+
     **tips:**
     1. x << 1 means $2\times x$ (x << N means $2^N \times x$)
     2. x >> 1 means $x$//$2$ (x >> N means $x$//$2^N$)
