@@ -1,38 +1,89 @@
 # Python Cheat Sheet
 
-A Cheat Sheet 📜 to **revise** Python syntax in **less time**. Particularly useful for solving Data Structure and Algorithmic problems or a quick overview before an interview.
+This is a fork of the original cheatsheet repo from [@buildwithmalik](https://github.com/buildwithmalik).
 
-> [Click here for similar Java Resource (not made by me)](https://drive.google.com/file/d/1ao4ZA28zzBttDkuS6MLQI52gDs_CJZEm/view) <br>
-> Get a PDF of this sheet at the end. <br>
-> Leave a ⭐ if you like the cheat sheet (contributions welcome!) <br>
+I speak too many programming dialects such as C/C++, Java, and Python, and sometimes my brain behaves like a bad language model that switches languages mid-sentence.  
+Solving problems and training models is fun, but not when my hands know what to do while my brain hesitates on the exact function call.
+
+Apparently I have enough memory to remember entire grammars but not enough to recall library syntax with precision. Ironically.
+
+This repo serves as my external brain for Python, pandas, numpy, scikit-learn, PyTorch, Transformers, and JAX, so that future-me can code faster and google less.  
+Since I already behave like a badly-aligned LLM mixing languages, this repo is essentially my fine-tuning dataset to make myself speak Python more consistently.
+
+
+
+[A similar Java Resource from the original repo](https://drive.google.com/file/d/1ao4ZA28zzBttDkuS6MLQI52gDs_CJZEm/view) 
+
 
 # Table of Contents
-- [Basics](#basics)
-- [Data Structures](#data-structures)
-  - [Lists](#lists)
-  - [Dictionary](#dictionary)
-  - [Counter](#counter)
-  - [Deque](#deque)
-  - [Heapq](#heapq)
-  - [Sets](#sets)
-  - [Tuples](#tuples)
-  - [Strings](#strings)
-- [Built-in Functions](#built-in-functions)
-- [Advanced Topics](#advanced-topics)
-- [Best Practices](#best-practices)
-- [Tips & Gotchas](#tips--gotchas)
+- [Python Cheat Sheet](#python-cheat-sheet)
+- [Table of Contents](#table-of-contents)
+- [Python Syntax](#python-syntax)
+  - [Basics](#basics)
+    - [Data Types](#data-types)
+    - [Operator Precedence](#operator-precedence)
+    - [Iterable vs Iterator](#iterable-vs-iterator)
+  - [Data Structures](#data-structures)
+    - [Lists](#lists)
+    - [Dictionary](#dictionary)
+    - [Counter](#counter)
+    - [Deque](#deque)
+    - [Heapq](#heapq)
+    - [Sets](#sets)
+    - [Tuples](#tuples)
+    - [Strings](#strings)
+  - [Built-in Functions](#built-in-functions)
+  - [Advanced Topics](#advanced-topics)
+    - [Custom Sorting with cmp\_to\_key](#custom-sorting-with-cmp_to_key)
+    - [Taking Multiple Inputs](#taking-multiple-inputs)
+    - [Math Module Essentials](#math-module-essentials)
+    - [Important Python Integer Operations](#important-python-integer-operations)
+  - [Best Practices](#best-practices)
+    - [Documentation](#documentation)
+    - [Testing](#testing)
+  - [Tips \& Gotchas](#tips--gotchas)
+- [Pandas and NumPy](#pandas-and-numpy)
+- [scikit-learn](#scikit-learn)
+- [torch](#torch)
+- [Transformers](#transformers)
+- [JAX](#jax)
+# Python Syntax
+## Basics
 
-# Basics
-
-## Data Types
+### Data Types
 ![Python Data Types](https://user-images.githubusercontent.com/59110866/173563442-1a6fa3d2-b569-4eb0-99cc-9b91cc8be1eb.png)
 
-## Operator Precedence
+### Operator Precedence
 ![Python Operators](https://user-images.githubusercontent.com/47276307/172329850-61fc0809-a4b0-416c-848b-1c502ecb4772.jpg)
+    **tips:**
+    1. x << 1 means $2\times x$ (x << N means $2^N \times x$)
+    2. x >> 1 means $x$//$2$ (x >> N means $x$//$2^N$)
+    3. `&` is the bitwise AND operator in Python, Java, and C/C++
+    4. `&&` is the logical AND operator in Java and C/C++, but it does not exist in Python. In Python, logical AND is `and`
+    5. `==` and `!=` are used for comparing values(e.g., a == b, a == True, a != 0)
+    6. `is` and `is not` are only for identity checks, mainly with None (e.g., x is None)
 
-# Data Structures
+### Iterable vs Iterator
 
-## Lists
+**Iterable**: An object you can loop over: list, tuple, string, dict (keys), set, range, Counter, deque, generator, file object,...(Can be used in a for-loop)
+
+**Iterator**: An object that yields items one-by-one via next()
+
+```python
+iter(obj)   # Convert an iterable into an iterator
+next(it)    # Get next item (raises StopIteration when finished)
+
+nums = [1,2,3]        # list is iterable
+it = iter(nums)       # make an iterator
+next(it)              # 1
+next(it)              # 2
+next(it)              # 3
+next(it)              # StopIteration (no more items)
+```
+
+## Data Structures
+
+### Lists
 Time Complexities:
 ![List Operations](https://user-images.githubusercontent.com/47276307/172330098-1c5f0a6e-7f80-4f4f-9be6-1d734e2c70cd.jpg)
 
@@ -40,9 +91,11 @@ Time Complexities:
 nums = [1,2,3]
 
 # Common Operations
+nums[i]            # Find index
 nums.index(1)      # Find index
 nums.append(1)     # Add to end
 nums.insert(0,10)  # Add 10 from left (at index 0 which is start)
+nums.insert(i, 10) # Add 10 at index i
 nums.remove(3)     # Remove value
 nums.pop()         # Remove & return last element
 nums.sort()        # In-place sort (TimSort: O(n log n))
@@ -57,7 +110,7 @@ nums[1:]    # Everything after index 1
 nums[:3]    # First three elements
 ```
 
-## Dictionary
+### Dictionary
 Time Complexities:
 ![Dictionary Operations](https://user-images.githubusercontent.com/47276307/172330107-e68e3228-1c76-4bfb-bb38-04d18f94d5b9.jpg)
 
@@ -65,21 +118,28 @@ Time Complexities:
 d = {'a':1, 'b':2}
 
 # Essential Operations
-d.get('key', default)     # Safe access with default
-d.setdefault('key', 0)    # Set if missing
-d.items()                 # Key-value pairs
+d['key']                 # Direct access (KeyError if missing)
+d.get('key', default)    # Read with fallback (no error)
+d.setdefault('key',0)    # Read or insert default if missing
+d['key'] = value         # Set or update
+d.items()                 # Key-value pairs iterable of (key, value) tuples
+for k, v in d.items():
+    print(k, v)
+for k in d:
+    print(k)
 d.keys()                  # Just keys
 d.values()               # Just values
 d.pop(key)              # Remove and return value
 d.update({key: value})  # Batch update
+d.update({'b':99, 'c':3})
 
 # Advanced Usage
-from collections import defaultdict
-d = defaultdict(list)     # Auto-initialize missing keys
-d = defaultdict(int)      # Useful for counting
+from collections import defaultdict # Missing keys get a default value instead of KeyError
+d = defaultdict(list)   # Missing keys auto-create [] 
+d = defaultdict(int)    # Missing keys auto-create 0 (good for counting)
 ```
 
-## Counter
+### Counter
 ```python
 from collections import Counter
 
@@ -94,7 +154,7 @@ c.update("more")      # Add counts from iterable
 c.total()             # Sum of all counts
 ```
 
-## Deque
+### Deque
 Time Complexities:
 ![Deque Operations](https://user-images.githubusercontent.com/47276307/172330115-78500420-3276-4e45-8ce3-fd668b7eb14e.jpg)
 
@@ -112,7 +172,7 @@ d.extendleft([1,2,3])# Extend left
 d.rotate(n)          # Rotate n steps right (negative for left)
 ```
 
-## Heapq
+### Heapq
 
 ```python
 import heapq
@@ -137,7 +197,7 @@ heap = []
 heapq.heappush(heap, (priority, item))  # Sort by priority
 ```
 
-## Sets
+### Sets
 Time Complexities:
 ![Untitled](https://user-images.githubusercontent.com/47276307/172330132-7a785f5f-bbc6-43b9-b82f-794190813787.jpg)
 
@@ -159,7 +219,7 @@ a.issubset(b)        # True if all elements of a are in b
 a.issuperset(b)      # True if all elements of b are in a
 ```
 
-## Tuples
+### Tuples
 ```python
 # Tuples are immutable lists
 t = (1, 2, 3, 1)
@@ -173,7 +233,7 @@ x, y = (1, 2)   # Tuple unpacking
 coords = [(1,2), (3,4)]  # Tuple in collections
 ```
 
-## Strings
+### Strings
 ```python
 s = "hello world"
 
@@ -198,7 +258,7 @@ chr(97)              # ASCII to char ('a')
 ''.join(['a','b'])   # Concatenate list elements
 ```
 
-# Built-in Functions
+## Built-in Functions
 
 ```python
 # Iteration Helpers
@@ -207,7 +267,10 @@ zip(lst1, lst2)      # Parallel iteration
 map(fn, lst)         # Apply function to all elements
 filter(fn, lst)      # Keep elements where fn returns True
 any(lst)             # True if any element is True
+any([False, 1, 0])   # → True
 all(lst)             # True if all elements are True
+all([1, 2, 3])       # → True
+
 
 # Binary Search (import bisect)
 bisect.bisect(lst, x)     # Find insertion point
@@ -224,12 +287,18 @@ set([1,2,2])         # List to set
 # Math
 abs(-5)              # Absolute value
 pow(2, 3)            # Power
-round(3.14159, 2)    # Round to decimals
+round(3.14159, 2)    # Round to decimals/Banker's rounding 
+                     #(also known as round half to even)
+round(2.5)           # 2
+len([1,2,3])         # Length of iterable
+sum([1,2,3])         # Sum of elements
+max([1,7,3])         # Largest value
+min([1,7,3])         # Smallest value
 ```
 
-# Advanced Topics
+## Advanced Topics
 
-## Custom Sorting with cmp_to_key
+### Custom Sorting with cmp_to_key
 ```python
 from functools import cmp_to_key
 
@@ -247,7 +316,7 @@ def compare(item1, item2):
 sorted_list = sorted(items, key=cmp_to_key(compare))
 ```
 
-## Taking Multiple Inputs
+### Taking Multiple Inputs
 ```python
 # Basic multiple input
 x, y = input("Enter two values: ").split()
@@ -265,7 +334,7 @@ values = input("Enter comma-separated values: ").split(',')
 x, y = [int(x) for x in input("Enter two numbers: ").split()]
 ```
 
-## Math Module Essentials
+### Math Module Essentials
 ```python
 import math
 
@@ -286,7 +355,7 @@ math.degrees(rad)     # Convert radians to degrees
 math.radians(deg)     # Convert degrees to radians
 ```
 
-## Important Python Integer Operations
+### Important Python Integer Operations
 ```python
 # Binary representation
 bin(10)              # '0b1010'
@@ -303,9 +372,9 @@ print(int(x/y))      # -1 (preferred for negative numbers)
 print(x % y)         # 1 (Python's modulo with negative numbers)
 ```
 
-# Best Practices
+## Best Practices
 
-## Documentation
+### Documentation
 ```python
 def binary_search(arr, target):
     """
@@ -319,14 +388,14 @@ def binary_search(arr, target):
     pass
 ```
 
-## Testing
+### Testing
 ```python
 # Use assertions for edge cases
 assert binary_search([], 1) == -1, "Empty array should return -1"
 assert binary_search([1], 1) == 0, "Single element array should work"
 ```
 
-# Tips & Gotchas
+## Tips & Gotchas
 
 1. Integer Division:
 ```python
@@ -392,5 +461,11 @@ def good(lst=None):  # Do this instead
     return lst
 ```
 
----
-Made with ❤️ for fellow leetcoders.
+# Pandas and NumPy
+
+# scikit-learn
+
+# torch
+
+# Transformers
+# JAX
