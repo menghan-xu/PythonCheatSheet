@@ -53,8 +53,8 @@ This repo serves as my external brain for Python, pandas, numpy, scikit-learn, P
 
 ### Operator Precedence
 ![Python Operators](https://user-images.githubusercontent.com/47276307/172329850-61fc0809-a4b0-416c-848b-1c502ecb4772.jpg)
-    **tips:**
 
+**tips:**
     1. x << 1 means $2\times x$ (x << N means $2^N \times x$)
     2. x >> 1 means $x$//$2$ (x >> N means $x$//$2^N$)
     3. `&` is the bitwise AND operator in Python, Java, and C/C++
