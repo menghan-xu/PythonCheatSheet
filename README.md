@@ -209,7 +209,7 @@ heapq.heappush(heap, (priority, item))  # Sort by priority
 
 To find top-k largest among n numbers:
 - Use a min-heap of size k → O(n log k) (optimal when k << n)
-- Full sort is O(n log n), slower and unnecessary
+- Full sort is O(n log n)
 
 
 ### Sets
