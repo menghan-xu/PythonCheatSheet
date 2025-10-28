@@ -56,12 +56,12 @@ This repo serves as my external brain for Python, pandas, numpy, scikit-learn, P
 
 **tips:**
 
-    1. x << 1 means $2\times x$ (x << N means $2^N \times x$)
-    2. x >> 1 means $x$//$2$ (x >> N means $x$//$2^N$)
-    3. `&` is the bitwise AND operator in Python, Java, and C/C++
-    4. `&&` is the logical AND operator in Java and C/C++, but it does not exist in Python. In Python, logical AND is `and`
-    5. `==` and `!=` are used for comparing values(e.g., a == b, a == True, a != 0)
-    6. `is` and `is not` are only for identity checks, mainly with None (e.g., x is None)
+1. x << 1 means $2\times x$ (x << N means $2^N \times x$)
+2. x >> 1 means $x$//$2$ (x >> N means $x$//$2^N$)
+3. `&` is the bitwise AND operator in Python, Java, and C/C++
+4. `&&` is the logical AND operator in Java and C/C++, but it does not exist in Python. In Python, logical AND is `and`
+5. `==` and `!=` are used for comparing values(e.g., a == b, a == True, a != 0)
+6. `is` and `is not` are only for identity checks, mainly with None (e.g., x is None)
 
 ### Iterable vs Iterator
 
@@ -113,7 +113,7 @@ nums[:3]    # First three elements
 ### Dictionary
 Time Complexities:
 ![Dictionary Operations](https://user-images.githubusercontent.com/47276307/172330107-e68e3228-1c76-4bfb-bb38-04d18f94d5b9.jpg)
-
+Python's built-in **hash table** implementation
 ```python
 d = {'a':1, 'b':2}
 
@@ -140,6 +140,7 @@ d = defaultdict(int)    # Missing keys auto-create 0 (good for counting)
 ```
 
 ### Counter
+A dict subclass implemented on top of a **hash table** for counting frequencies
 ```python
 from collections import Counter
 
@@ -168,8 +169,13 @@ d.appendleft(2)      # Add left
 d.pop()              # Remove right
 d.popleft()          # Remove left
 d.extend([1,2,3])    # Extend right
-d.extendleft([1,2,3])# Extend left
+d = deque([10, 20])
+d.extendleft([1, 2, 3]) # -> deque([3, 2, 1, 10, 20])
+                        # Extend left (reverses the input order)
+
 d.rotate(n)          # Rotate n steps right (negative for left)
+deque([1,2,3,4]).rotate(1)  # -> deque([4,1,2,3])
+deque([1,2,3,4]).rotate(-1) # -> deque([2,3,4,1])
 ```
 
 ### Heapq
@@ -181,6 +187,7 @@ import heapq
 nums = [3,1,4,1,5]
 heapq.heapify(nums)          # Convert to heap in-place: O(n)
 heapq.heappush(nums, 2)      # Add element: O(log n)
+nums[0]    # heap top (smallest in a min-heap)
 smallest = heapq.heappop(nums)  # Remove smallest: O(log n)
 
 # MaxHeap Trick: Multiply by -1
@@ -189,8 +196,9 @@ heapq.heapify(nums)          # O(n)
 largest = -heapq.heappop(nums)  # Get largest: O(log n)
 
 # Advanced Operations
-k_largest = heapq.nlargest(k, nums)    # O(n * log k)
-k_smallest = heapq.nsmallest(k, nums)  # O(n * log k)
+k_largest = heapq.nlargest(k, nums)    # O(n log k), internally keeps a min-heap of size k
+k_smallest = heapq.nsmallest(k, nums)  # O(n log k), internally keeps a max-heap of size k
+
 
 # Custom Priority Queue
 heap = []
