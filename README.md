@@ -30,11 +30,13 @@ This repo serves as my external brain for Python, pandas, numpy, scikit-learn, P
     - [Sets](#sets)
     - [Tuples](#tuples)
     - [Strings](#strings)
+    - [Binary Tree](#binary-tree)
   - [Built-in Functions](#built-in-functions)
   - [Advanced Topics](#advanced-topics)
-    - [Custom Sorting with cmp\_to\_key](#custom-sorting-with-cmp_to_key)
+    - [Custom Sorting](#custom-sorting)
     - [Taking Multiple Inputs](#taking-multiple-inputs)
     - [Math Module Essentials](#math-module-essentials)
+    - [Random Module Essentials](#random-module-essentials)
     - [Important Python Integer Operations](#important-python-integer-operations)
   - [Best Practices](#best-practices)
     - [Documentation](#documentation)
@@ -62,6 +64,8 @@ This repo serves as my external brain for Python, pandas, numpy, scikit-learn, P
 4. `&&` is the logical AND operator in Java and C/C++, but it does not exist in Python. In Python, logical AND is `and`
 5. `==` and `!=` are used for comparing values(e.g., a == b, a == True, a != 0)
 6. `is` and `is not` are only for identity checks, mainly with None (e.g., x is None)
+7. `/` is True division → float `//` is Floor division (rounds down toward -inf)
+8. `None` is the only value of type NoneType. Python does not have Null (Java, C/C++ have)
 
 ### Iterable vs Iterator
 
@@ -89,6 +93,10 @@ Time Complexities:
 
 ```python
 nums = [1,2,3]
+# 2-D array
+nums = [[0]*cols]*rows                  # BAD: rows share the same inner list (aliasing)
+nums = [[0 for i in range(cols)] for j in range(rows)]  # GOOD: each row is a new list
+nums = [[0] * cols for j in range(rows)]   # GOOD
 
 # Common Operations
 nums[i]            # Find index
@@ -182,7 +190,7 @@ deque([1,2,3,4]).rotate(-1) # -> deque([2,3,4,1])
 
 ```python
 import heapq
-
+nums = []      #initialize heap
 # MinHeap Operations - All O(log n) except heapify
 nums = [3,1,4,1,5]
 heapq.heapify(nums)          # Convert to heap in-place: O(n)
@@ -217,6 +225,7 @@ Time Complexities:
 ![Untitled](https://user-images.githubusercontent.com/47276307/172330132-7a785f5f-bbc6-43b9-b82f-794190813787.jpg)
 
 ```python
+s = set()   # Use set() to create an empty set ({} creates a dict)
 s = {1,2,3}
 
 # Common Operations
@@ -227,13 +236,19 @@ s.pop()              # Remove and return arbitrary element
 
 # Set Operations
 a.union(b)           # Elements in a OR b
+a | b
 a.intersection(b)    # Elements in a AND b
+a & b
 a.difference(b)      # Elements in a but NOT in b
+a - b
 a.symmetric_difference(b)  # Elements in a OR b but NOT both
+a ^ b
 a.issubset(b)        # True if all elements of a are in b
 a.issuperset(b)      # True if all elements of b are in a
 ```
-
+**tips:**
+- use set() to track visited or remove duplicates (amortized average case O(1) lookup)
+- `set` is implemented as a hash table, a dictionary that stores only keys, enabling O(1) average-time membership tests and updates
 ### Tuples
 ```python
 # Tuples are immutable lists
@@ -258,7 +273,7 @@ s.split(',')         # Split on comma
 s.strip()            # Remove leading/trailing whitespace
 s.lower()            # Convert to lowercase
 s.upper()            # Convert to uppercase
-s.isalnum()          # Check if alphanumeric
+s.isalnum()          # Check if alphanumeric/is alphabetic or numeric?
 s.isalpha()          # Check if alphabetic
 s.isdigit()          # Check if all digits
 s.find('sub')        # Index of substring (-1 if not found)
@@ -266,18 +281,62 @@ s.count('sub')       # Count occurrences
 s.replace('old', 'new')  # Replace all occurrences
 
 # ASCII Conversion
-ord('a')             # Char to ASCII (97)
-chr(97)              # ASCII to char ('a')
+ord('a')             # Char to ASCII (97) ordinal
+chr(97)              # ASCII to char ('a') character
 
 # Join Lists
 ''.join(['a','b'])   # Concatenate list elements
 ```
+**tips**
+`str` is immutable, you cannot modify in-place; 
+
+
+### Binary Tree 
+```python
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+
+def inorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+    ans = []
+    stack = []
+    cur = root
+    while cur or stack:
+        while cur:
+            stack.append(cur)
+            cur = cur.left
+        cur = stack.pop()
+        ans.append(cur.val)
+        cur = cur.right
+    return ans
+        
+def preorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+    ans = []
+    cur = root
+    stack = []
+    while cur or stack:
+        if cur:
+            ans.append(cur.val)
+            stack.append(cur.right)
+            cur = cur.left
+        else:
+            cur = stack.pop()
+    return ans
+```
+
+
+
 
 ## Built-in Functions
 
 ```python
 # Iteration Helpers
-enumerate(lst)        # Index + value pairs
+enumerate(lst)        # iterate with (index, value) pairs
+for i, val in enumerate(lst):
+    print(i, val)
 zip(lst1, lst2)      # Parallel iteration
 map(fn, lst)         # Apply function to all elements
 filter(fn, lst)      # Keep elements where fn returns True
@@ -313,22 +372,32 @@ min([1,7,3])         # Smallest value
 
 ## Advanced Topics
 
-### Custom Sorting with cmp_to_key
+### Custom Sorting
 ```python
+# Sorting Basics
+# Default: ascending order (small → large)
+arr.sort()                                # in-place sort
+sorted_arr = sorted(arr)                  # returns a new sorted list
+
+# key Parameter
+arr.sort(key=lambda x: x[1])              # sort by 2nd element
+arr.sort(key=lambda x: (x[1], -x[0]))     # sort by multiple criteria
+arr.sort(key=len)                         # sort by length
+arr.sort(key=lambda x: abs(x))            # sort by absolute value
+arr.sort(reverse=True)                    # descending order
+sorted_arr = sorted(arr, key = lambda x: x[1]) # both sort and sorted support key= and reverse=
+
+# Custom Sorting with cmp_to_key
 from functools import cmp_to_key
 
-def compare(item1, item2):
-    # Return -1: item1 comes first
-    # Return 1:  item2 comes first
-    # Return 0:  items are equal
-    if item1 < item2:
+def compare(a, b):
+    if a[0] + a[1] < b[0] + b[1]: 
         return -1
-    elif item1 > item2:
+    if a[0] + a[1] > b[0] + b[1]: 
         return 1
     return 0
 
-# Sort using custom comparison
-sorted_list = sorted(items, key=cmp_to_key(compare))
+arr = sorted(arr, key=cmp_to_key(compare)) # custom comparison
 ```
 
 ### Taking Multiple Inputs
@@ -356,7 +425,7 @@ import math
 # Constants
 math.pi       # 3.141592653589793
 math.e        # 2.718281828459045
-
+math.inf
 # Common Functions
 math.ceil(2.3)        # 3 - Smallest integer greater than x
 math.floor(2.3)       # 2 - Largest integer less than x
@@ -369,7 +438,13 @@ math.pow(x, y)        # x^y (prefer x ** y for integers)
 math.degrees(rad)     # Convert radians to degrees
 math.radians(deg)     # Convert degrees to radians
 ```
-
+### Random Module Essentials
+```python
+random.randint(a, b)   # returns a random integer N such that a ≤ N ≤ b (both inclusive)
+random.random()        # returns a float in [0.0, 1.0)
+random.choice(seq)     # chooses a random element from a non-empty sequence
+random.shuffle(seq)    # shuffles a list in place
+```
 ### Important Python Integer Operations
 ```python
 # Binary representation
